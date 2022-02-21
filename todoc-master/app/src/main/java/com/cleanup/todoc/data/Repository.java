@@ -1,7 +1,12 @@
-package com.cleanup.todoc.model;
+package com.cleanup.todoc.data;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+
+import com.cleanup.todoc.data.dao.ProjectDao;
+import com.cleanup.todoc.data.dao.TaskDao;
+import com.cleanup.todoc.data.entity.Project;
+import com.cleanup.todoc.data.entity.Task;
 
 import java.util.List;
 

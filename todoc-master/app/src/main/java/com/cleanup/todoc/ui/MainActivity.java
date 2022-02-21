@@ -1,4 +1,4 @@
-package com.cleanup.todoc;
+package com.cleanup.todoc.ui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -20,16 +20,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cleanup.todoc.model.MainViewModel;
-import com.cleanup.todoc.model.Project;
-import com.cleanup.todoc.model.Task;
-import com.cleanup.todoc.model.TaskAdapter;
-import com.cleanup.todoc.model.TaskViewState;
-import com.cleanup.todoc.model.ViewModelFactory;
+import com.cleanup.todoc.R;
+import com.cleanup.todoc.ui.viewmodel.MainViewModel;
+import com.cleanup.todoc.data.entity.Project;
+import com.cleanup.todoc.data.entity.Task;
+import com.cleanup.todoc.ui.viewmodelfactory.ViewModelFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

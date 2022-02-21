@@ -1,4 +1,4 @@
-package com.cleanup.todoc.model;
+package com.cleanup.todoc.ui;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;

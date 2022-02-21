@@ -1,14 +1,17 @@
-package com.cleanup.todoc.model;
+package com.cleanup.todoc.ui.viewmodel;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+
+import com.cleanup.todoc.data.entity.Project;
+import com.cleanup.todoc.data.Repository;
+import com.cleanup.todoc.data.entity.Task;
+import com.cleanup.todoc.ui.TaskViewState;
 
 import java.util.ArrayList;
 import java.util.Collections;
