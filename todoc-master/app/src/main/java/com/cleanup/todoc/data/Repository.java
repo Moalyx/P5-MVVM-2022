@@ -18,32 +18,24 @@ public class Repository {
     @NonNull
     private final TaskDao taskDao;
 
-
-
     public Repository(@NonNull ProjectDao projectDao, @NonNull TaskDao taskDao) {
         this.projectDao = projectDao;
         this.taskDao = taskDao;
     }
 
-    public LiveData<List<Project>> getAllProjects(){
+    public LiveData<List<Project>> getAllProjects() {
         return projectDao.getAllProjects();
     }
 
-    public LiveData<List<Task>> getAllTask(){
+    public LiveData<List<Task>> getAllTask() {
         return taskDao.getAllTask();
     }
 
-    public void insertTask(Task task){
+    public void insertTask(Task task) {
         taskDao.insertTask(task);
     }
 
-    public void deleteTask(Task task){
-        taskDao.deleteTask(task);
+    public void deleteTaskById(long id) {
+        taskDao.deleteTaskById(id);
     }
-
-
-
-
-
-
 }

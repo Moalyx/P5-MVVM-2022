@@ -1,4 +1,4 @@
-package com.cleanup.todoc.ui;
+package com.cleanup.todoc.ui.main;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -59,14 +59,8 @@ public class TaskAdapter extends ListAdapter<TaskViewState, TaskAdapter.TaskView
             lblTaskName.setText(taskViewState.getName());
             imgDelete.setTag(taskViewState);
 
-            if (taskViewState != null) {
-                imgProject.setSupportImageTintList(ColorStateList.valueOf(taskViewState.getColorProject()));
-                lblProjectName.setText(taskViewState.getProjectName());
-            } else {
-                imgProject.setVisibility(View.INVISIBLE);
-                lblProjectName.setText("");
-            }
-
+            imgProject.setSupportImageTintList(ColorStateList.valueOf(taskViewState.getColorProject()));
+            lblProjectName.setText(taskViewState.getProjectName());
         }
     }
 

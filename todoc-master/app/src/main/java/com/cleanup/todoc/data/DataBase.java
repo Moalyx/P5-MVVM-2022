@@ -16,12 +16,12 @@ import com.cleanup.todoc.data.entity.Task;
 import java.util.concurrent.Executor;
 
 @Database(
-        entities = {
-                Project.class,
-                Task.class
-        },
-        version = 1,
-        exportSchema = false
+    entities = {
+        Project.class,
+        Task.class
+    },
+    version = 1,
+    exportSchema = false
 )
 public abstract class DataBase extends RoomDatabase {
 
@@ -34,14 +34,15 @@ public abstract class DataBase extends RoomDatabase {
     public abstract TaskDao taskDao();
 
     public static DataBase getInstance(
-            @NonNull Application application,
-            @NonNull Executor executor) {
+        @NonNull Application application,
+        @NonNull Executor executor
+    ) {
         if (instance == null) {
             synchronized (DataBase.class) {
                 if (instance == null) {
                     instance = create(
-                            application,
-                            executor
+                        application,
+                        executor
                     );
                 }
             }
@@ -50,13 +51,13 @@ public abstract class DataBase extends RoomDatabase {
     }
 
     private static DataBase create(
-            @NonNull Application application,
-            @NonNull Executor executor
+        @NonNull Application application,
+        @NonNull Executor executor
     ) {
         Builder<DataBase> builder = Room.databaseBuilder(
-                application,
-                DataBase.class,
-                DATABASE_NAME
+            application,
+            DataBase.class,
+            DATABASE_NAME
         );
 
         builder.addCallback(new Callback() {
@@ -67,9 +68,9 @@ public abstract class DataBase extends RoomDatabase {
                     @Override
                     public void run() {
                         ProjectDao projectDao = DataBase.getInstance(application, executor).projectDao();
-                        projectDao.insertProject(new Project(1L, "Projet Tartampion", 0xFFEADAD1));
-                        projectDao.insertProject(new Project(2L, "Projet Lucidia", 0xFFB4CDBA));
-                        projectDao.insertProject(new Project(3L, "Projet Circus", 0xFFA3CED2));
+                        projectDao.insertProject(new Project(1, "Projet Tartampion", 0xFFEADAD1));
+                        projectDao.insertProject(new Project(2, "Projet Lucidia", 0xFFB4CDBA));
+                        projectDao.insertProject(new Project(3, "Projet Circus", 0xFFA3CED2));
 
                     }
                 });

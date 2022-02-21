@@ -1,4 +1,4 @@
-package com.cleanup.todoc.ui.viewmodelfactory;
+package com.cleanup.todoc.ui;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.cleanup.todoc.MainApplication;
 import com.cleanup.todoc.data.DataBase;
 import com.cleanup.todoc.data.Repository;
-import com.cleanup.todoc.ui.viewmodel.MainViewModel;
+import com.cleanup.todoc.ui.main.MainViewModel;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

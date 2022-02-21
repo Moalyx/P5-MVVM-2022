@@ -23,7 +23,7 @@ import static org.junit.Assert.assertThat;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import com.cleanup.todoc.ui.MainActivity;
+import com.cleanup.todoc.ui.main.MainActivity;
 
 /**
  * Instrumented test, which will execute on an Android device.
