@@ -69,4 +69,7 @@ public class Task {
             ", creationTimestamp=" + creationTimestamp +
             '}';
     }
+
+    public static class TaskAZComparator {
+    }
 }

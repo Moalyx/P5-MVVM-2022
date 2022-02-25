@@ -14,6 +14,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.cleanup.todoc.data.Repository;
+import com.cleanup.todoc.data.entity.Project;
 import com.cleanup.todoc.data.entity.Task;
 
 import java.time.LocalDateTime;
@@ -42,18 +43,26 @@ public class MainViewModel extends ViewModel {
         currentSortMethodMutableLiveData.setValue(SortMethod.NONE);
 
         LiveData<List<Task>> tasksLiveData = repository.getAllTask();
+        LiveData<List<Project>> projectsLiveData = repository.getAllProjects();
 
         mediatorLiveData.addSource(tasksLiveData, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
-                combine(tasks, currentSortMethodMutableLiveData.getValue());
+                combine(tasks, currentSortMethodMutableLiveData.getValue(),projectsLiveData.getValue() );
             }
         });
 
         mediatorLiveData.addSource(currentSortMethodMutableLiveData, new Observer<SortMethod>() {
             @Override
             public void onChanged(SortMethod sortMethod) {
-                combine(tasksLiveData.getValue(), sortMethod);
+                combine(tasksLiveData.getValue(), sortMethod, projectsLiveData.getValue());
+            }
+        });
+
+        mediatorLiveData.addSource(projectsLiveData, new Observer<List<Project>>() {
+            @Override
+            public void onChanged(List<Project> projects) {
+                combine(tasksLiveData.getValue(), currentSortMethodMutableLiveData.getValue(), projects);
             }
         });
 
@@ -64,7 +73,7 @@ public class MainViewModel extends ViewModel {
         return mediatorLiveData;
     }
 
-    private void combine(@Nullable List<Task> tasks, @Nullable SortMethod sortMethod) {
+    private void combine(@Nullable List<Task> tasks, @Nullable SortMethod sortMethod, @Nullable List<Project> projects) {
         if (tasks == null || sortMethod == null) {
             return;
         }
@@ -88,35 +97,39 @@ public class MainViewModel extends ViewModel {
         }
 
         for (Task task : sortableTasks) {
-            taskViewStates.add(
-                new TaskViewState(
-                    task.getId(),
-                    task.getName(),
-                    "PROJECT NAME",
-                    Color.parseColor("#FF0088"),
-                    task.getCreationTimestamp()
-                )
-            );
+            for (Project project : projects) {
+                taskViewStates.add(
+                        new TaskViewState(
+                                task.getId(),
+                                task.getName(),
+                                //"PROJECT NAME",
+                                project.getName(),
+                                //Color.parseColor("#FF0088"),
+                                project.getColor(),
+                                task.getCreationTimestamp()
+                        )
+                );
+            }
         }
 
         mediatorLiveData.setValue(taskViewStates);
     }
 
-    public void addRandomTask() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                int rolled = new Random().nextInt(3) + 1;
-
-                repository.insertTask(new Task(
-                    0,
-                    rolled,
-                    UUID.randomUUID().toString(),
-                    LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
-                ));
-            }
-        });
-    }
+//    public void addRandomTask() {
+//        executor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                int rolled = new Random().nextInt(3) + 1;
+//
+//                repository.insertTask(new Task(
+//                    0,
+//                    rolled,
+//                    UUID.randomUUID().toString(),
+//                    LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+//                ));
+//            }
+//        });
+//    }
 
     public void deleteTask(long id) {
         executor.execute(new Runnable() {
@@ -130,26 +143,6 @@ public class MainViewModel extends ViewModel {
     public void onSortMethodChanged(SortMethod sortMethod) {
         currentSortMethodMutableLiveData.setValue(sortMethod);
     }
-
-//    public LiveData<List<TaskViewState>> getListTaskViewstates() {
-//        getListTaskViewstate();
-//        List<TaskViewState> taskViewStates = allTaskToSort.getValue() ;
-//        switch (sortMethod) {
-//            case ALPHABETICAL:
-//                Collections.sort(tasks, new Task.TaskAZComparator());
-//                break;
-//            case ALPHABETICAL_INVERTED:
-//                Collections.sort(tasks, new Task.TaskZAComparator());
-//                break;
-//            case RECENT_FIRST:
-//                Collections.sort(tasks, new Task.TaskRecentComparator());
-//                break;
-//            case OLD_FIRST:
-//                Collections.sort(tasks, new Task.TaskOldComparator());
-//                break;
-//        }
-//
-//    }
 
     enum SortMethod {
 
@@ -195,14 +188,14 @@ public class MainViewModel extends ViewModel {
 
 
     // TODO A partir côté VM du AddTask(Dialog)Fragment
-    public void onAddTaskButtonClick(long projectId, @NonNull String name, long creationTimestamp) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                repository.insertTask(new Task(0, projectId, name, creationTimestamp));
-            }
-        });
-    }
+//    public void onAddTaskButtonClick(long projectId, @NonNull String name, long creationTimestamp) {
+//        executor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                repository.insertTask(new Task(0, projectId, name, creationTimestamp));
+//            }
+//        });
+//    }
 
 
 }
