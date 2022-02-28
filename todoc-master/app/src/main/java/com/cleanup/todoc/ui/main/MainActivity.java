@@ -3,42 +3,32 @@ package com.cleanup.todoc.ui.main;
 import static com.cleanup.todoc.ui.main.MainViewModel.*;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
-import com.cleanup.todoc.data.entity.Project;
-import com.cleanup.todoc.data.entity.Task;
 import com.cleanup.todoc.ui.ViewModelFactory;
+import com.cleanup.todoc.ui.create_task.AddDialogFragment;
+import com.cleanup.todoc.ui.create_task.CreateTaskDialogFragment;
+import com.cleanup.todoc.ui.create_task.OldCreateTaskDialogFragment;
+import com.cleanup.todoc.ui.create_task.CreateTaskViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
-    private DialogViewModel dialogviewModel;
-    private AddDialogFragment addDialogFragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,12 +62,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        dialogviewModel.getprojectViewState().observe(this, new Observer<List<ProjectViewState>>() {
-//            @Override
-//            public void onChanged(List<ProjectViewState> projectViewStates) {
-//                dialogviewModel.getListProjectViewState();
-//            }
-//        });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,14 +71,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openDialog(){
-        CreateTaskDialogFragment createTaskDialogFragment = new CreateTaskDialogFragment();
-        createTaskDialogFragment.show(getSupportFragmentManager(), "dialogFragment");
+        CreateTaskDialogFragment fragment = new CreateTaskDialogFragment();
+        fragment.show(getSupportFragmentManager(), null);
     }
-
-//    public void openDialog(){
-//        AddDialogFragment addDialogFragment = new AddDialogFragment();
-//        addDialogFragment.show(getSupportFragmentManager(), "dialogFragment");
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

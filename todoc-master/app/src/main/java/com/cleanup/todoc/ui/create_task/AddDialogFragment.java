@@ -1,4 +1,4 @@
-package com.cleanup.todoc.ui.main;
+package com.cleanup.todoc.ui.create_task;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -29,7 +29,7 @@ import java.util.List;
 public class AddDialogFragment extends DialogFragment {
 
     private AlertDialog dialog;
-    private DialogViewModel dialogviewModel;
+    private CreateTaskViewModel dialogviewModel;
     EditText dialogEditText = null;
     Spinner dialogSpinner = null;
     private List<Project> allProjects = new ArrayList<>();
@@ -37,7 +37,7 @@ public class AddDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dialogviewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(DialogViewModel.class);
+        dialogviewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(CreateTaskViewModel.class);
         getProjects();
         getAddTaskDialog();
         showAddTaskDialog();
@@ -133,12 +133,12 @@ public class AddDialogFragment extends DialogFragment {
     }
 
     private void getProjects() {
-        dialogviewModel.getAllProjects().observe(this, new Observer<List<Project>>() {
-            @Override
-            public void onChanged(@Nullable List<Project> projects) {
-                AddDialogFragment.this.updateProjects(projects);
-            }
-        });
+//        dialogviewModel.getAllProjects().observe(this, new Observer<List<Project>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Project> projects) {
+//                AddDialogFragment.this.updateProjects(projects);
+//            }
+//        });
     }
 
         private void updateProjects(List<Project> projects) {
@@ -147,12 +147,12 @@ public class AddDialogFragment extends DialogFragment {
 
     public void populateDialogSpinner() {
         //allProjects.add(new Project(1, "Projet Tartampion", 0xFFEADAD1));
-        final ArrayAdapter<Project> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, dialogviewModel.getallTheProjects());
-        Spinner dialogSpinner = dialog.findViewById(R.id.project_spinner);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        if (dialogSpinner != null) {
-            dialogSpinner.setAdapter(adapter);
-        }
+//        final ArrayAdapter<Project> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, dialogviewModel.getallTheProjects());
+//        Spinner dialogSpinner = dialog.findViewById(R.id.project_spinner);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        if (dialogSpinner != null) {
+//            dialogSpinner.setAdapter(adapter);
+//        }
     }
 
 

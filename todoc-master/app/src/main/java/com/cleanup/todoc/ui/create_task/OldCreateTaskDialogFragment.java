@@ -1,7 +1,6 @@
-package com.cleanup.todoc.ui.main;
+package com.cleanup.todoc.ui.create_task;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,10 +25,10 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateTaskDialogFragment extends DialogFragment {
+public class OldCreateTaskDialogFragment extends DialogFragment {
 
     private AlertDialog dialog;
-    private DialogViewModel dialogviewModel;
+    private CreateTaskViewModel dialogviewModel;
     EditText dialogEditText = null;
     Spinner dialogSpinner = null;
     private List<Project> allProjects = new  ArrayList<>();
@@ -37,7 +36,7 @@ public class CreateTaskDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public AlertDialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        dialogviewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(DialogViewModel.class);
+        dialogviewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(CreateTaskViewModel.class);
         getProjects();
 
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity(), R.style.Dialog);
@@ -74,13 +73,13 @@ public class CreateTaskDialogFragment extends DialogFragment {
     }
 
     private void getProjects() {
-        dialogviewModel.getAllProjects().observe(this, new Observer<List<Project>>() {
-            @Override
-            public void onChanged(@Nullable List<Project> projects) {
-                //CreateTaskDialogFragment.this.updateProjects(projects);
-                allProjects =  projects;
-            }
-        });
+//        dialogviewModel.getAllProjects().observe(this, new Observer<List<Project>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Project> projects) {
+//                //CreateTaskDialogFragment.this.updateProjects(projects);
+//                allProjects =  projects;
+//            }
+//        });
     }
 
     private AlertDialog getAddTaskDialog() {

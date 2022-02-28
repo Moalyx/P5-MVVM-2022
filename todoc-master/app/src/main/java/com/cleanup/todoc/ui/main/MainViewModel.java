@@ -74,7 +74,7 @@ public class MainViewModel extends ViewModel {
     }
 
     private void combine(@Nullable List<Task> tasks, @Nullable SortMethod sortMethod, @Nullable List<Project> projects) {
-        if (tasks == null || sortMethod == null) {
+        if (tasks == null || sortMethod == null || projects == null) {
             return;
         }
 
