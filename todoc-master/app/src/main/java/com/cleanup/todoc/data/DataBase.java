@@ -35,14 +35,14 @@ public abstract class DataBase extends RoomDatabase {
 
     public static DataBase getInstance(
         @NonNull Application application,
-        @NonNull Executor executor
+        @NonNull Executor ioExecutor
     ) {
         if (instance == null) {
             synchronized (DataBase.class) {
                 if (instance == null) {
                     instance = create(
                         application,
-                        executor
+                        ioExecutor
                     );
                 }
             }
@@ -52,7 +52,7 @@ public abstract class DataBase extends RoomDatabase {
 
     private static DataBase create(
         @NonNull Application application,
-        @NonNull Executor executor
+        @NonNull Executor ioExecutor
     ) {
         Builder<DataBase> builder = Room.databaseBuilder(
             application,
@@ -64,10 +64,10 @@ public abstract class DataBase extends RoomDatabase {
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
 
-                executor.execute(new Runnable() {
+                ioExecutor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        ProjectDao projectDao = DataBase.getInstance(application, executor).projectDao();
+                        ProjectDao projectDao = DataBase.getInstance(application, ioExecutor).projectDao();
                         projectDao.insertProject(new Project(1, "Projet Tartampion", 0xFFEADAD1));
                         projectDao.insertProject(new Project(2, "Projet Lucidia", 0xFFB4CDBA));
                         projectDao.insertProject(new Project(3, "Projet Circus", 0xFFA3CED2));

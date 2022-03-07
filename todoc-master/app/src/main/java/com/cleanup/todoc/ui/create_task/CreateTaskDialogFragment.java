@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,12 +32,12 @@ public class CreateTaskDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_task_dialog_fragment, container, true);
 
-        EditText editText = view.findViewById(R.id.create_task_et_name);
-        Spinner spinnerProject = view.findViewById(R.id.create_task_spi_project);
+        EditText taskNameEditText = view.findViewById(R.id.create_task_et_name);
+        Spinner projectSpinner = view.findViewById(R.id.create_task_spi_project);
         Button button = view.findViewById(R.id.create_task_btn);
 
         ArrayAdapter<ProjectViewState> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item);
-        spinnerProject.setAdapter(adapter);
+        projectSpinner.setAdapter(adapter);
 
         CreateTaskViewModel viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(CreateTaskViewModel.class);
 
@@ -48,35 +49,24 @@ public class CreateTaskDialogFragment extends DialogFragment {
             }
         });
 
+        viewModel.getToastMessageSingleLiveEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String message) {
+                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        viewModel.getDismissSingleLiveEvent().observe(this, new Observer<Void>() {
+            @Override
+            public void onChanged(Void unused) {
+                dismiss();
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (editText != null && spinnerProject != null) {
-                    String taskName = editText.getText().toString();
-
-                    Project project = null;
-                    long projectId = 0;
-                    if (spinnerProject.getSelectedItem() instanceof Project) {
-                        project = (Project) spinnerProject.getSelectedItem();
-                        projectId = project.getId();
-                    }
-
-                    if (taskName.trim().isEmpty()) {
-                        editText.setError(getString(R.string.empty_task_name));
-                    } else if (project != null) {
-                        long timeStamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-
-                        viewModel.onAddTaskButtonClick(projectId, taskName, timeStamp);
-
-                        // dialogInterface.dismiss();
-//                    } else {
-//                        dialogInterface.dismiss();
-//                    }
-//                } else {
-//                    dialogInterface.dismiss();
-                    }
-                }
-
+                viewModel.onOkButtonClicked(taskNameEditText.getText().toString(), (ProjectViewState) projectSpinner.getSelectedItem());
             }
         });
 

@@ -98,17 +98,18 @@ public class MainViewModel extends ViewModel {
 
         for (Task task : sortableTasks) {
             for (Project project : projects) {
-                taskViewStates.add(
+                if (task.getProjectId() == project.getId()) {
+                    taskViewStates.add(
                         new TaskViewState(
-                                task.getId(),
-                                task.getName(),
-                                //"PROJECT NAME",
-                                project.getName(),
-                                //Color.parseColor("#FF0088"),
-                                project.getColor(),
-                                task.getCreationTimestamp()
+                            task.getId(),
+                            task.getName(),
+                            //"PROJECT NAME",
+                            project.getName(),
+                            //Color.parseColor("#FF0088"),
+                            project.getColor()
                         )
-                );
+                    );
+                }
             }
         }
 
@@ -175,14 +176,14 @@ public class MainViewModel extends ViewModel {
     public static class TaskRecentComparator implements Comparator<Task> {
         @Override
         public int compare(Task left, Task right) {
-            return (int) (right.getCreationTimestamp() - left.getCreationTimestamp());
+            return (int) (right.getId() - left.getId());
         }
     }
 
     public static class TaskOldComparator implements Comparator<Task> {
         @Override
         public int compare(Task left, Task right) {
-            return (int) (left.getCreationTimestamp() - right.getCreationTimestamp());
+            return (int) (left.getId() - right.getId());
         }
     }
 

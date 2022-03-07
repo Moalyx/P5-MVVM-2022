@@ -17,12 +17,13 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private static ViewModelFactory factory;
 
-    private final Executor executor = Executors.newFixedThreadPool(10);
+    private final MainThreadExecutor mainThreadExecutor = new MainThreadExecutor();
+    private final Executor ioExecutor = Executors.newFixedThreadPool(10);
 
     private final Repository repository;
 
     private ViewModelFactory(){
-        DataBase dataBase = DataBase.getInstance(MainApplication.getApplication(), executor);
+        DataBase dataBase = DataBase.getInstance(MainApplication.getApplication(), ioExecutor);
 
         repository = new Repository(dataBase.projectDao(), dataBase.taskDao());
     }
@@ -43,10 +44,15 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
-            return (T) new MainViewModel(repository, executor);
+            return (T) new MainViewModel(repository, ioExecutor);
         }
         else if(modelClass.isAssignableFrom(CreateTaskViewModel.class)){
-            return (T) new CreateTaskViewModel(repository, executor);
+            return (T) new CreateTaskViewModel(
+                MainApplication.getApplication(),
+                repository,
+                mainThreadExecutor,
+                ioExecutor
+            );
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

@@ -6,16 +6,16 @@ import java.util.Objects;
 
 public class ProjectViewState {
 
-    private final long id;
+    private final long projectId;
     private final String projectName;
 
-    public ProjectViewState(long id, String projectName) {
-        this.id = id;
+    public ProjectViewState(long projectId, String projectName) {
+        this.projectId = projectId;
         this.projectName = projectName;
     }
 
-    public long getId() {
-        return id;
+    public long getProjectId() {
+        return projectId;
     }
 
     public String getProjectName() {
@@ -27,12 +27,12 @@ public class ProjectViewState {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProjectViewState that = (ProjectViewState) o;
-        return id == that.id && Objects.equals(projectName, that.projectName);
+        return projectId == that.projectId && Objects.equals(projectName, that.projectName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, projectName);
+        return Objects.hash(projectId, projectName);
     }
 
     @NonNull
