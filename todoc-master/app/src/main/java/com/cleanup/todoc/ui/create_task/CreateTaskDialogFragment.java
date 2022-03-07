@@ -1,5 +1,6 @@
 package com.cleanup.todoc.ui.create_task;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.cleanup.todoc.R;
 import com.cleanup.todoc.data.entity.Project;
 import com.cleanup.todoc.ui.ViewModelFactory;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 public class CreateTaskDialogFragment extends DialogFragment {
@@ -45,6 +48,39 @@ public class CreateTaskDialogFragment extends DialogFragment {
             }
         });
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (editText != null && spinnerProject != null) {
+                    String taskName = editText.getText().toString();
+
+                    Project project = null;
+                    long projectId = 0;
+                    if (spinnerProject.getSelectedItem() instanceof Project) {
+                        project = (Project) spinnerProject.getSelectedItem();
+                        projectId = project.getId();
+                    }
+
+                    if (taskName.trim().isEmpty()) {
+                        editText.setError(getString(R.string.empty_task_name));
+                    } else if (project != null) {
+                        long timeStamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+
+                        viewModel.onAddTaskButtonClick(projectId, taskName, timeStamp);
+
+                        // dialogInterface.dismiss();
+//                    } else {
+//                        dialogInterface.dismiss();
+//                    }
+//                } else {
+//                    dialogInterface.dismiss();
+                    }
+                }
+
+            }
+        });
+
         return view;
     }
+
 }
