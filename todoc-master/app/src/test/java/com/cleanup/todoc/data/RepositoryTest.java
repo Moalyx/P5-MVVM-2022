@@ -1,10 +1,10 @@
 package com.cleanup.todoc.data;
 
+import static org.junit.Assert.assertEquals;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-
-import com.cleanup.todoc.data.Repository;
 import com.cleanup.todoc.data.dao.ProjectDao;
 import com.cleanup.todoc.data.dao.TaskDao;
 import com.cleanup.todoc.data.entity.Project;
@@ -13,11 +13,8 @@ import com.cleanup.todoc.data.entity.Task;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -29,16 +26,16 @@ public class RepositoryTest {
     private Repository repository;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         repository = new Repository(projectDao, taskDao);
     }
 
     @Test
-    public void verifyGetAllProjects(){
+    public void verifyGetAllProjects() {
 
-        LiveData<List<Project>> projectsLiveData = Mockito.spy(new MutableLiveData<>()); // permet de créer une livedata factice
+        LiveData<List<Project>> projectsLiveData = new MutableLiveData<>(); // permet de créer une livedata factice
         Mockito.doReturn(projectsLiveData).when(projectDao).getAllProjects(); // on indique que lorsque la methode de l'interface est appelé elle retournera la factice livedata
-        Mockito.when(projectDao.getAllProjects()).thenReturn(projectsLiveData); // autre maniere d'écrire que la ligne precedente
+        //Mockito.when(projectDao.getAllProjects()).thenReturn(projectsLiveData); // autre maniere d'écrire que la ligne precedente
 
 
         LiveData<List<Project>> result = repository.getAllProjects(); // on fait appel au dao via le repo
@@ -49,8 +46,8 @@ public class RepositoryTest {
     }
 
     @Test
-    public void verifyGetAllTasks(){
-        LiveData<List<Task>> tasksLiveData = Mockito.spy(new MutableLiveData<>());
+    public void verifyGetAllTasks() {
+        LiveData<List<Task>> tasksLiveData = new MutableLiveData<>();
         Mockito.doReturn(tasksLiveData).when(taskDao).getAllTask();
 
         LiveData<List<Task>> result = repository.getAllTask();
@@ -61,13 +58,17 @@ public class RepositoryTest {
     }
 
     @Test
-    public void verifyInsertTask(){
+    public void verifyInsertTask() {
+        Task task = Mockito.mock(Task.class);
 
+        repository.insertTask(task);
 
+        Mockito.verify(taskDao).insertTask(task);
+        Mockito.verifyNoMoreInteractions(projectDao, taskDao);
     }
 
     @Test
-    public void verifyDeleteTask(){
+    public void verifyDeleteTask() {
         long taskId = 1;
 
         repository.deleteTaskById(taskId);

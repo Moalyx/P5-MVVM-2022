@@ -1,11 +1,11 @@
 package com.cleanup.todoc.data.entity;
 
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import java.util.Objects;
 
 @Entity
 public class Project {
@@ -39,4 +39,25 @@ public class Project {
         return color;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Project project = (Project) o;
+        return id == project.id && color == project.color && name.equals(project.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, color);
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", color=" + color +
+            '}';
+    }
 }

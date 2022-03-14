@@ -25,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 
-
 @RunWith(AndroidJUnit4.class)
 public class TaskDaoTest {
 
@@ -44,8 +43,7 @@ public class TaskDaoTest {
     @Before
     public void initDb() {
         Context context = ApplicationProvider.getApplicationContext();
-        this.database = Room.inMemoryDatabaseBuilder(context,
-                DataBase.class)
+        this.database = Room.inMemoryDatabaseBuilder(context, DataBase.class)
                 .allowMainThreadQueries()
                 .build();
     }
