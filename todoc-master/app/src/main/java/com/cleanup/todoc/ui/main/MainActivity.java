@@ -18,10 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.ui.ViewModelFactory;
-import com.cleanup.todoc.ui.create_task.AddDialogFragment;
 import com.cleanup.todoc.ui.create_task.CreateTaskDialogFragment;
-import com.cleanup.todoc.ui.create_task.OldCreateTaskDialogFragment;
-import com.cleanup.todoc.ui.create_task.CreateTaskViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;

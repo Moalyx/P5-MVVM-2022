@@ -27,37 +27,21 @@ public class CreateTaskViewModel extends ViewModel {
     private final MainThreadExecutor mainThreadExecutor;
     private final Executor ioExecutor;
 
+
     private final SingleLiveEvent<String> toastMessageSingleLiveEvent = new SingleLiveEvent<>();
 
     private final SingleLiveEvent<Void> dismissSingleLiveEvent = new SingleLiveEvent<>();
 
     public CreateTaskViewModel(
-        Context context,
-        @NonNull Repository repository,
-        MainThreadExecutor mainThreadExecutor,
-        Executor ioExecutor
+            Context context,
+            @NonNull Repository repository,
+            MainThreadExecutor mainThreadExecutor,
+            Executor ioExecutor
     ) {
         this.context = context;
         this.repository = repository;
         this.mainThreadExecutor = mainThreadExecutor;
         this.ioExecutor = ioExecutor;
-    }
-
-    public void onProjectSelected(Project project) {
-        repository.onProjectSelected(project);
-    }
-
-    public void onTaskChanged(String name) {
-        repository.onTaskChanged(name);
-    }
-
-    public void onAddTaskButtonClick(long projectId, @NonNull String name, long creationTimestamp) {
-        ioExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                repository.insertTask(new Task(0, projectId, name));
-            }
-        });
     }
 
     public LiveData<List<ProjectViewState>> getListProjectViewState() {
@@ -67,10 +51,11 @@ public class CreateTaskViewModel extends ViewModel {
                 List<ProjectViewState> projectViewStates = new ArrayList<>();
                 for (Project project : projects) {
                     projectViewStates.add(
-                        new ProjectViewState(
-                            project.getId(),
-                            project.getName()
-                        )
+                            new ProjectViewState(
+                                    project.getId(),
+                                    project.getName(),
+                                    project.getColor()
+                            )
                     );
                 }
                 return projectViewStates;
@@ -82,13 +67,39 @@ public class CreateTaskViewModel extends ViewModel {
         return toastMessageSingleLiveEvent;
     }
 
+//    public int[] getColorForSpinner (){
+//        List<ProjectViewState> projects;
+//        projectLiveData = CreateTaskViewModel.this.getListProjectViewState(); // repository.getAllProjects();
+//        projects = projectLiveData.getValue();
+//
+//        int [] colorList = new int[3];
+//        for (int i = 0; i < projects.size() ; i++){
+//            colorList[i] = projects.get(i).getColor();
+//        }
+//        return colorList;
+//    }
+//
+//    public String[] getNameForSpinner (){
+//        List<ProjectViewState> projects;
+//        projectLiveData = CreateTaskViewModel.this.getListProjectViewState(); // repository.getAllProjects();
+//        projects = projectLiveData.getValue();
+//
+//        String [] nameList = new String [3];
+//        for (int i = 0; i < projects.size() ; i++){
+//            nameList[i] = projects.get(i).getProjectName();
+//        }
+//        return nameList;
+//    }
+
+
+
     public SingleLiveEvent<Void> getDismissSingleLiveEvent() {
         return dismissSingleLiveEvent;
     }
 
     public void onOkButtonClicked(String taskName, ProjectViewState projectViewState) {
         if (taskName.isEmpty()) {
-            toastMessageSingleLiveEvent.setValue(context.getString(R.string.app_name) + " 3");
+            toastMessageSingleLiveEvent.setValue(context.getString(R.string.empty_task));
             return;
         }
 
@@ -112,31 +123,7 @@ public class CreateTaskViewModel extends ViewModel {
                 });
             }
         });
-//
-//        if (taskNameEditText != null && projectSpinner != null) {
-//            String taskName = taskNameEditText.getText().toString();
-//
-//            Project project = null;
-//            long projectId = 0;
-//            if (projectSpinner.getSelectedItem() instanceof Project) {
-//                project = (Project) projectSpinner.getSelectedItem();
-//                projectId = project.getId();
-//            }
-//
-//            if (taskName.trim().isEmpty()) {
-//                taskNameEditText.setError(getString(R.string.empty_task_name));
-//            } else if (project != null) {
-//                long timeStamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-//
-//                viewModel.onAddTaskButtonClick(projectId, taskName, timeStamp);
-//
-//                // dialogInterface.dismiss();
-////                    } else {
-////                        dialogInterface.dismiss();
-////                    }
-////                } else {
-////                    dialogInterface.dismiss();
-//            }
+
     }
 
 }

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Todoc</string>
 
+    <string name="empty_task">le champs est vide, veuillez rentrer une tache</string>
+
     <string name="label_action_filter">Filter</string>
 
     <string name="sort_alphabetical">A -&gt; Z</string>
@@ -16,4 +18,5 @@
     <string name="task_name_hint">Nom de la tâche</string>
 
     <string name="empty_task_name">Le nom de la tâche doit être renseigné</string>
+    <string name="ok">ok</string>
 </resources>

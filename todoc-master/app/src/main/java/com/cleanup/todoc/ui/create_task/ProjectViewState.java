@@ -8,10 +8,12 @@ public class ProjectViewState {
 
     private final long projectId;
     private final String projectName;
+    private int color;
 
-    public ProjectViewState(long projectId, String projectName) {
+    public ProjectViewState(long projectId, String projectName,int color) {
         this.projectId = projectId;
         this.projectName = projectName;
+        this.color = color;
     }
 
     public long getProjectId() {
@@ -20,6 +22,10 @@ public class ProjectViewState {
 
     public String getProjectName() {
         return projectName;
+    }
+
+    public int getColor() {
+        return color;
     }
 
     @Override

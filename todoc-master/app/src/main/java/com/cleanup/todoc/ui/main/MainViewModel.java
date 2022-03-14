@@ -48,7 +48,7 @@ public class MainViewModel extends ViewModel {
         mediatorLiveData.addSource(tasksLiveData, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
-                combine(tasks, currentSortMethodMutableLiveData.getValue(),projectsLiveData.getValue() );
+                combine(tasks, currentSortMethodMutableLiveData.getValue(), projectsLiveData.getValue());
             }
         });
 
@@ -66,7 +66,6 @@ public class MainViewModel extends ViewModel {
             }
         });
 
-        // TODO 3ème source (les projects !)
     }
 
     public LiveData<List<TaskViewState>> getViewStateLiveData() {
@@ -100,14 +99,12 @@ public class MainViewModel extends ViewModel {
             for (Project project : projects) {
                 if (task.getProjectId() == project.getId()) {
                     taskViewStates.add(
-                        new TaskViewState(
-                            task.getId(),
-                            task.getName(),
-                            //"PROJECT NAME",
-                            project.getName(),
-                            //Color.parseColor("#FF0088"),
-                            project.getColor()
-                        )
+                            new TaskViewState(
+                                    task.getId(),
+                                    task.getName(),
+                                    project.getName(),
+                                    project.getColor()
+                            )
                     );
                 }
             }
@@ -115,22 +112,6 @@ public class MainViewModel extends ViewModel {
 
         mediatorLiveData.setValue(taskViewStates);
     }
-
-//    public void addRandomTask() {
-//        executor.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                int rolled = new Random().nextInt(3) + 1;
-//
-//                repository.insertTask(new Task(
-//                    0,
-//                    rolled,
-//                    UUID.randomUUID().toString(),
-//                    LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
-//                ));
-//            }
-//        });
-//    }
 
     public void deleteTask(long id) {
         executor.execute(new Runnable() {
@@ -186,17 +167,6 @@ public class MainViewModel extends ViewModel {
             return (int) (left.getId() - right.getId());
         }
     }
-
-
-    // TODO A partir côté VM du AddTask(Dialog)Fragment
-//    public void onAddTaskButtonClick(long projectId, @NonNull String name, long creationTimestamp) {
-//        executor.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                repository.insertTask(new Task(0, projectId, name, creationTimestamp));
-//            }
-//        });
-//    }
 
 
 }

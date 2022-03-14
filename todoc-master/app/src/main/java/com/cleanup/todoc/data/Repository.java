@@ -39,13 +39,4 @@ public class Repository {
         taskDao.deleteTaskById(id);
     }
 
-    public void onProjectSelected(Project project) {
-        String projectName = project.getName();
-    }
-
-    public void onTaskChanged(String name){}
-
-    public void onAddTaskButtonClick(Task task){}
-
-
 }

@@ -1,46 +1,57 @@
-package com.cleanup.todoc;
+package com.cleanup.todoc.ui;
 
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.RecyclerView;
+
+
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.cleanup.todoc.TestUtils.withRecyclerView;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.cleanup.todoc.utils.TestUtils.withRecyclerView;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 
+
+import com.cleanup.todoc.R;
 import com.cleanup.todoc.ui.main.MainActivity;
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @author Gaëtan HERFRAY
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
+
+
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
+
+    private MainActivity mainActivity;
+
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
+    //public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityScenario<MainActivity> activityScenario = ActivityScenario.launch(MainActivity.class);
+    @Before
+    public void setUp(){
+        ActivityScenario<MainActivity> activityScenario = ActivityScenario.launch(MainActivity.class);
+        activityScenario.onActivity(activity -> mainActivity = activity);
+    }
 
     @Test
     public void addAndRemoveTask() {
-        MainActivity activity = rule.getActivity();
+        //MainActivity activity = activityScenario.onActivity(activity1 -> mainActivity = activity);
         TextView lblNoTask = activity.findViewById(R.id.lbl_no_task);
         RecyclerView listTasks = activity.findViewById(R.id.list_tasks);
+
+
 
         onView(withId(R.id.fab_add_task)).perform(click());
         onView(withId(R.id.txt_task_name)).perform(replaceText("Tâche example"));

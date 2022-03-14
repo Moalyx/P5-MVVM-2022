@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:minWidth="300dp"
     android:padding="16dp"
+    android:background="@color/colorPrimary"
     >
 
     <EditText
@@ -18,6 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="#6324D6"
         />
 
     <Spinner
@@ -31,6 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/create_task_et_name"
+        android:background="@color/colorAccent"
         />
 
     <Button
@@ -40,7 +43,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="ok"
+        android:text="@string/ok"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,20 +32,25 @@ public class CreateTaskDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_task_dialog_fragment, container, true);
 
+        CreateTaskViewModel viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(CreateTaskViewModel.class);
+
         EditText taskNameEditText = view.findViewById(R.id.create_task_et_name);
         Spinner projectSpinner = view.findViewById(R.id.create_task_spi_project);
         Button button = view.findViewById(R.id.create_task_btn);
 
-        ArrayAdapter<ProjectViewState> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item);
+        ArrayAdapter<ProjectViewState> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1);
         projectSpinner.setAdapter(adapter);
 
-        CreateTaskViewModel viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(CreateTaskViewModel.class);
+//        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(getContext(), viewModel.getColorForSpinner(), viewModel.getNameForSpinner());
+
+//        CreateTaskViewModel viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(CreateTaskViewModel.class);
 
         viewModel.getListProjectViewState().observe(this, new Observer<List<ProjectViewState>>() {
             @Override
             public void onChanged(List<ProjectViewState> projectViewStates) {
                 adapter.clear();
                 adapter.addAll(projectViewStates);
+//                projectSpinner.setAdapter(spinnerAdapter);
             }
         });
 
