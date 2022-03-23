@@ -71,7 +71,10 @@ public class CreateTaskDialogFragment extends DialogFragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.onOkButtonClicked(taskNameEditText.getText().toString(), (ProjectViewState) projectSpinner.getSelectedItem());
+                viewModel.onOkButtonClicked(
+                        ((ProjectViewState) projectSpinner.getSelectedItem()).getProjectId(),
+                        taskNameEditText.getText().toString()
+                );
             }
         });
 

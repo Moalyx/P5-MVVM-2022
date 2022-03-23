@@ -20,14 +20,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.cleanup.todoc.R;
-import com.cleanup.todoc.data.DataBase;
 import com.cleanup.todoc.ui.create_task.ProjectViewState;
 import com.cleanup.todoc.ui.main.MainActivity;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

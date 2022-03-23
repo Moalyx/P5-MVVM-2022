@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
+import com.cleanup.todoc.R;
 import com.cleanup.todoc.data.Repository;
 import com.cleanup.todoc.data.entity.Project;
 import com.cleanup.todoc.data.entity.Task;
@@ -23,15 +24,20 @@ import com.cleanup.todoc.utils.LiveDataTestUtils;
 import com.cleanup.todoc.utils.TestExecutor;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runner.manipulation.Ordering;
 import org.mockito.Mock;
+import org.mockito.MockSettings;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -41,10 +47,10 @@ public class CreateTaskViewModelTest {
     @Rule
     public final InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    private final Application application = Mockito.mock(Application.class);
+    private final Application application = Mockito.mock(Application.class, new RuntimeExceptionAnswer());
     private final Repository repository = Mockito.mock(Repository.class);
-    private final Executor ioExecutor = Mockito.spy(new TestExecutor());
-    private final MainThreadExecutor mainThreadExecutor = Mockito.mock(MainThreadExecutor.class);
+    private final TestExecutor ioExecutor = Mockito.spy(new TestExecutor());
+    private final TestExecutor mainThreadExecutor = Mockito.spy(new TestExecutor());
 
     private final MutableLiveData<List<Project>> projectMutableLiveData = new MutableLiveData<>();
 
@@ -53,12 +59,13 @@ public class CreateTaskViewModelTest {
     @Before
     public void setUp() {
         Mockito.doReturn(projectMutableLiveData).when(repository).getAllProjects();
+        Mockito.doReturn("empty_task").when(application).getString(R.string.empty_task);
 
         projectMutableLiveData.setValue(getDefaultProject());
 
         createTaskViewModel = new CreateTaskViewModel(application, repository, mainThreadExecutor, ioExecutor);
 
-//        Mockito.verify(repository).getAllProjects(); //ERREUR ICI QUAND DECOMMENTE
+        Mockito.verify(repository).getAllProjects();
     }
 
     @Test
@@ -72,7 +79,7 @@ public class CreateTaskViewModelTest {
         assertEquals(getDefaultProjectViewStates(), projectViewStates);
         assertNull(toastMessage);
         assertNull(dismissDialog);
-        //Mockito.verifyNoMoreInteractions(application, repository, mainThreadExecutor, ioExecutor); //ERREUR ICI QUAND DECOMMENTE
+        Mockito.verifyNoMoreInteractions(application, repository, mainThreadExecutor, ioExecutor); //ERREUR ICI QUAND DECOMMENTE
     }
 
     @Test
@@ -86,7 +93,7 @@ public class CreateTaskViewModelTest {
         Void dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
 
         //Then
-        assertEquals(getEmptyProjectViewState(), projectViewState);
+        assertEquals(new ArrayList<>(), projectViewState);
         assertNull(toastMessage);
         assertNull(dismissDialog);
     }
@@ -115,7 +122,7 @@ public class CreateTaskViewModelTest {
         long selectedProjectId = projectViewStateToTest.getProjectId();
 
         //When
-        createTaskViewModel.onOkButtonClicked(taskDescription, projectViewStateToTest);
+        createTaskViewModel.onOkButtonClicked(2, taskDescription);
 
         List<ProjectViewState> projectViewStates = LiveDataTestUtils.getValue(createTaskViewModel.getListProjectViewState());
         String toastMessage = LiveDataTestUtils.getValue(createTaskViewModel.getToastMessageSingleLiveEvent());
@@ -126,76 +133,51 @@ public class CreateTaskViewModelTest {
         assertNull(toastMessage);
         assertNull(dismissDialog);
         Mockito.verify(ioExecutor).execute(any());
-        Mockito.verify(repository).insertTask(new Task(0, selectedProjectId, taskDescription));
-        //Mockito.verifyNoMoreInteractions(application, repository, mainThreadExecutor, ioExecutor); //ERREUR ICI QUAND DECOMMENTE
+        Mockito.verify(repository).insertTask(new Task(0, 2, taskDescription));
+        Mockito.verifyNoMoreInteractions(application, repository);
     }
 
     @Test
     public void addTaskFailedBecauseNoDescription() throws InterruptedException {
         //Given
         String taskDescription = "";
-        ProjectViewState projectViewStateToTest = new ProjectViewState(1, "Projet Tartampion", 0xFFEADAD1);
-        long selectedProjectId = projectViewStateToTest.getProjectId();
 
         //When
-        createTaskViewModel.onOkButtonClicked(taskDescription, projectViewStateToTest);
+        createTaskViewModel.onOkButtonClicked(2, taskDescription);
 
-        List<ProjectViewState> projectViewStates = LiveDataTestUtils.getValue(createTaskViewModel.getListProjectViewState());
         String toastMessage = LiveDataTestUtils.getValue(createTaskViewModel.getToastMessageSingleLiveEvent());
         Void dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
 
         //Then
-        assertEquals(getDefaultProjectViewStates(), projectViewStates);
-        assertNull(toastMessage); //ICI JE NE SAIS PAS QUOI METTRE CAR LE TOAST NE DEVRAIT PAS ETRE NULL CAR LE MESSAGE S'AFFICHE ETANT DONNE QUE LA DESCRIPTION EST VIDE
+        assertEquals("empty_task", toastMessage);
         assertNull(dismissDialog);
-        //Mockito.verifyNoMoreInteractions(application, repository, mainThreadExecutor, ioExecutor); //ERREUR ICI QUAND DECOMMENTE
+        Mockito.verify(application).getString(R.string.empty_task);
+        Mockito.verifyNoMoreInteractions(application, repository, mainThreadExecutor, ioExecutor); //ERREUR ICI QUAND DECOMMENTE
     }
 
 
     @NonNull
     private List<Project> getDefaultProject() {
         List<Project> projects = new ArrayList<>();
-
-        Project project1 = new Project(1, "Projet Tartampion", 0xFFEADAD1);
-        Project project2 = new Project(2, "Projet Lucidia", 0xFFB4CDBA);
-        Project project3 = new Project(3, "Projet Circus", 0xFFA3CED2);
-
-        projects.add(project1);
-        projects.add(project2);
-        projects.add(project3);
-
+        projects.add(new Project(1, "Projet Tartampion", 0xFFEADAD1));
+        projects.add(new Project(2, "Projet Lucidia", 0xFFB4CDBA));
+        projects.add(new Project(3, "Projet Circus", 0xFFA3CED2));
         return projects;
     }
 
     @NonNull
     private List<ProjectViewState> getDefaultProjectViewStates() {
         List<ProjectViewState> projectViewStates = new ArrayList<>();
-        List<Project> projects = new ArrayList<>();
-
-
-        Project project1 = new Project(1, "Projet Tartampion", 0xFFEADAD1);
-        Project project2 = new Project(2, "Projet Lucidia", 0xFFB4CDBA);
-        Project project3 = new Project(3, "Projet Circus", 0xFFA3CED2);
-
-        projects.add(project1);
-        projects.add(project2);
-        projects.add(project3);
-
-        for (Project project : projects) {
-            projectViewStates.add(
-                    new ProjectViewState(
-                            project.getId(),
-                            project.getName(),
-                            project.getColor()
-                    )
-            );
-        }
+        projectViewStates.add(new ProjectViewState(1, "Projet Tartampion", 0xFFEADAD1));
+        projectViewStates.add(new ProjectViewState(2, "Projet Lucidia", 0xFFB4CDBA));
+        projectViewStates.add(new ProjectViewState(3, "Projet Circus", 0xFFA3CED2));
         return projectViewStates;
     }
 
-    private List<ProjectViewState> getEmptyProjectViewState() {
-        return new ArrayList<>();
+
+    public static class RuntimeExceptionAnswer implements Answer<Object> {
+        public Object answer( InvocationOnMock invocation ) throws Throwable {
+            throw new RuntimeException (invocation.getMethod().getName() + ":" + Arrays.toString(invocation.getArguments()) + " is not mocked" );
+        }
     }
-
-
 }

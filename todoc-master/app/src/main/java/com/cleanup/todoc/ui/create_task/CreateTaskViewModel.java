@@ -25,7 +25,7 @@ public class CreateTaskViewModel extends ViewModel {
     @NonNull
     private final Repository repository;
     private final Context context;
-    private final MainThreadExecutor mainThreadExecutor;
+    private final Executor mainThreadExecutor;
     private final Executor ioExecutor;
 
 
@@ -33,20 +33,20 @@ public class CreateTaskViewModel extends ViewModel {
 
     private final SingleLiveEvent<Void> dismissSingleLiveEvent = new SingleLiveEvent<>();
 
+    private final LiveData<List<ProjectViewState>> viewStateLiveData;
+
     public CreateTaskViewModel(
             Context context,
             @NonNull Repository repository,
-            MainThreadExecutor mainThreadExecutor,
+            Executor mainThreadExecutor,
             Executor ioExecutor
     ) {
         this.context = context;
         this.repository = repository;
         this.mainThreadExecutor = mainThreadExecutor;
         this.ioExecutor = ioExecutor;
-    }
 
-    public LiveData<List<ProjectViewState>> getListProjectViewState() {
-        return Transformations.map(repository.getAllProjects(), new Function<List<Project>, List<ProjectViewState>>() {
+        viewStateLiveData = Transformations.map(repository.getAllProjects(), new Function<List<Project>, List<ProjectViewState>>() {
             @Override
             public List<ProjectViewState> apply(List<Project> projects) {
                 List<ProjectViewState> projectViewStates = new ArrayList<>();
@@ -62,6 +62,10 @@ public class CreateTaskViewModel extends ViewModel {
                 return projectViewStates;
             }
         });
+    }
+
+    public LiveData<List<ProjectViewState>> getListProjectViewState() {
+        return viewStateLiveData;
     }
 
     public SingleLiveEvent<String> getToastMessageSingleLiveEvent() {
@@ -98,7 +102,7 @@ public class CreateTaskViewModel extends ViewModel {
         return dismissSingleLiveEvent;
     }
 
-    public void onOkButtonClicked(String taskName, ProjectViewState projectViewState) {
+    public void onOkButtonClicked(long projectId, String taskName) {
         if (taskName.isEmpty()) {
             toastMessageSingleLiveEvent.setValue(context.getString(R.string.empty_task));
             return;
@@ -114,7 +118,7 @@ public class CreateTaskViewModel extends ViewModel {
 //                    e.printStackTrace();
 //                }
 
-                repository.insertTask(new Task(0, projectViewState.getProjectId(), taskName));
+                repository.insertTask(new Task(0, projectId, taskName));
 
                 mainThreadExecutor.execute(new Runnable() {
                     @Override
