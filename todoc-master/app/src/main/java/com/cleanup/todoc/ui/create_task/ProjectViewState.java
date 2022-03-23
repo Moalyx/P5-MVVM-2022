@@ -8,7 +8,7 @@ public class ProjectViewState {
 
     private final long projectId;
     private final String projectName;
-    private int color;
+    private final int color;
 
     public ProjectViewState(long projectId, String projectName,int color) {
         this.projectId = projectId;

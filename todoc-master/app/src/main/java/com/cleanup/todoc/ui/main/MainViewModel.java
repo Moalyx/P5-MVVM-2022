@@ -32,6 +32,7 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final Repository repository;
     private final Executor executor;
+
     private final MutableLiveData<SortMethod> currentSortMethodMutableLiveData = new MutableLiveData<>();
 
     private final MediatorLiveData<List<TaskViewState>> mediatorLiveData = new MediatorLiveData<>();

@@ -3,6 +3,7 @@ package com.cleanup.todoc.ui.create_task;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
@@ -107,11 +108,11 @@ public class CreateTaskViewModel extends ViewModel {
             @Override
             public void run() {
 
-                try {
-                    Thread.sleep(3_000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(3_000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 
                 repository.insertTask(new Task(0, projectViewState.getProjectId(), taskName));
 

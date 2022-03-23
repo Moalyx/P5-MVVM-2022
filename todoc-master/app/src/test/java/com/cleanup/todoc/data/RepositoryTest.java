@@ -37,7 +37,6 @@ public class RepositoryTest {
         Mockito.doReturn(projectsLiveData).when(projectDao).getAllProjects(); // on indique que lorsque la methode de l'interface est appelé elle retournera la factice livedata
         //Mockito.when(projectDao.getAllProjects()).thenReturn(projectsLiveData); // autre maniere d'écrire que la ligne precedente
 
-
         LiveData<List<Project>> result = repository.getAllProjects(); // on fait appel au dao via le repo
 
         assertEquals(projectsLiveData, result); // on verifie que le resultat est le meme que l'on passe directement par le dao ou par le repo ce qui signifie que le repo fonctionne

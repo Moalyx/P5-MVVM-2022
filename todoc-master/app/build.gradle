@@ -39,7 +39,7 @@ android {
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
-    def room_version = "2.4.1"
+//    def room_version = "2.4.1"
     //noinspection GradleDependency
     implementation "androidx.room:room-runtime:2.4.1"
     annotationProcessor "androidx.room:room-compiler:2.4.2"

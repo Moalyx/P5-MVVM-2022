@@ -18,7 +18,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private static ViewModelFactory factory;
 
     private final MainThreadExecutor mainThreadExecutor = new MainThreadExecutor();
-    private final Executor ioExecutor = Executors.newFixedThreadPool(10);
+    private final Executor ioExecutor = Executors.newFixedThreadPool(8);
 
     private final Repository repository;
 

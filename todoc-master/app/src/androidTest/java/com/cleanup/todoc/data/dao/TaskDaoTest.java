@@ -91,6 +91,9 @@ public class TaskDaoTest {
         database.projectDao().insertProject(project2);
         database.taskDao().insertTask(task2);
 
+        projects = LiveDataTestUtils.getValue(this.database.projectDao().getAllProjects());
+        tasks = LiveDataTestUtils.getValue(database.taskDao().getAllTask());
+
         assertEquals(projects.size(), 2);
         assertEquals(tasks.size(), 2);
 
@@ -119,7 +122,7 @@ public class TaskDaoTest {
     }
 
     @Test
-    public void insertOneTaskDeleteOneGetOneGetZero() throws InterruptedException {
+    public void insertOneTaskDeleteOneGetZero() throws InterruptedException {
         List<Project> projects = LiveDataTestUtils.getValue(this.database.projectDao().getAllProjects());
         List<Task> tasks = LiveDataTestUtils.getValue(database.taskDao().getAllTask());
         assertEquals(projects.size(), 0);
@@ -127,11 +130,16 @@ public class TaskDaoTest {
 
         database.projectDao().insertProject(project1);
         database.taskDao().insertTask(task1);
+        projects = LiveDataTestUtils.getValue(this.database.projectDao().getAllProjects());
+        tasks = LiveDataTestUtils.getValue(database.taskDao().getAllTask());
+
 
         assertEquals(projects.size(), 1);
         assertEquals(tasks.size(), 1);
 
         database.taskDao().deleteTaskById(task1.getId());
+
+        tasks = LiveDataTestUtils.getValue(database.taskDao().getAllTask());
 
         assertEquals(tasks.size(), 0);
         assertTrue(tasks.isEmpty());

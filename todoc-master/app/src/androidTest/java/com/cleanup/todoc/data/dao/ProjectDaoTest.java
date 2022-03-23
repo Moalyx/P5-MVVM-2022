@@ -26,7 +26,19 @@ import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class ProjectDaoTest {
 
-    final Project project3 = new Project(3, "Projet Circus", 0xFFA3CED2);
+    private Project getFirstProject() {
+        return new Project(0, "Projet Tartampion", 0xFFEADAD1);
+    }
+
+    private Project getSecondProject() {
+        return new Project(0, "Projet Lucidia", 0xFFB4CDBA);
+    }
+
+    private Project getThirdProject() {
+        return  new Project(0, "Projet Circus",0xFFA3CED2);
+    }
+
+
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -94,41 +106,41 @@ public class ProjectDaoTest {
             projects
         );
     }
-//
-//    @Test
-//    public void insertThreeProjectsGetThreeProjects() throws InterruptedException {
-//        List<Project> projects = LiveDataTestUtils.getValue(dataBase.projectDao().getAllProjects());
-//        assertEquals(projects.size(), 0);
-//        assertTrue(projects.isEmpty());
-//
-//        dataBase.projectDao().insertProject(project1);
-//        dataBase.projectDao().insertProject(project2);
-//        dataBase.projectDao().insertProject(project3);
-//        projects = LiveDataTestUtils.getValue(dataBase.projectDao().getAllProjects());
-//        assertEquals(projects.size(), 3);
-//
-//        assertTrue(projects.get(0).getId() == project1.getId()
-//            && projects.get(0).getName().equals(project1.getName())
-//            && projects.get(0).getColor() == project1.getColor()
-//        );
-//
-//        assertTrue(projects.get(1).getId() == project2.getId()
-//            && projects.get(1).getName().equals(project2.getName())
-//            && projects.get(1).getColor() == project2.getColor()
-//        );
-//
-//        assertTrue(projects.get(2).getId() == project3.getId()
-//            && projects.get(2).getName().equals(project3.getName())
-//            && projects.get(2).getColor() == project3.getColor()
-//        );
-//    }
 
-    private Project getFirstProject() {
-        return new Project(0, "Projet Tartampion", 0xFFEADAD1);
+    @Test
+    public void insertThreeProjectsGetThreeProjects() throws InterruptedException {
+        // Given
+        dataBase.projectDao().insertProject(getFirstProject());
+        dataBase.projectDao().insertProject(getSecondProject());
+        dataBase.projectDao().insertProject(getThirdProject());
+
+        //When
+        List<Project> projects = LiveDataTestUtils.getValue(dataBase.projectDao().getAllProjects());
+
+        //Then
+        assertEquals(projects.size(), 3);
+
+        assertEquals(Arrays.asList(
+                new Project(
+                        1,
+                        "Projet Tartampion",
+                        0xFFEADAD1
+                ),
+                new Project(
+                        2,
+                        "Projet Lucidia",
+                        0xFFB4CDBA
+                ),
+                new Project(
+                        3,
+                        "Projet Circus",
+                        0xFFA3CED2
+                )
+        ),
+                projects
+        );
     }
 
-    private Project getSecondProject() {
-        return new Project(0, "Projet Lucidia", 0xFFB4CDBA);
-    }
+
 }
 
