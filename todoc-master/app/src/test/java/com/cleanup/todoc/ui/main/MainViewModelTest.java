@@ -106,6 +106,42 @@ public class MainViewModelTest {
     }
 
     @Test
+    public void sortByAlphabeticalOrderAToZ() throws InterruptedException {
+        mainViewModel.onSortMethodChanged(MainViewModel.SortMethod.ALPHABETICAL);
+
+        List<TaskViewState> taskViewStates = LiveDataTestUtils.getValue(mainViewModel.getViewStateLiveData());
+
+        assertEquals(getDefaultTaskViewStatesListSortedByAlphabeticalOrderAToZ(),taskViewStates);
+    }
+
+    @Test
+    public void sortByAlphabeticalOrderZToA() throws InterruptedException {
+        mainViewModel.onSortMethodChanged(MainViewModel.SortMethod.ALPHABETICAL_INVERTED);
+
+        List<TaskViewState> taskViewStates = LiveDataTestUtils.getValue(mainViewModel.getViewStateLiveData());
+
+        assertEquals(getDefaultTaskViewStatesListSortedByAlphabeticalOrderZToA(),taskViewStates);
+    }
+
+    @Test
+    public void sortByRecentFirst() throws InterruptedException {
+        mainViewModel.onSortMethodChanged(MainViewModel.SortMethod.RECENT_FIRST);
+
+        List<TaskViewState> taskViewStates = LiveDataTestUtils.getValue(mainViewModel.getViewStateLiveData());
+
+        assertEquals(getDefaultTaskViewStatesListSortedByRecentFirst(),taskViewStates);
+    }
+
+    @Test
+    public void sortByOldFirst() throws InterruptedException {
+        mainViewModel.onSortMethodChanged(MainViewModel.SortMethod.OLD_FIRST);
+
+        List<TaskViewState> taskViewStates = LiveDataTestUtils.getValue(mainViewModel.getViewStateLiveData());
+
+        assertEquals(getDefaultTaskViewStatesListSortedByOldFirst(),taskViewStates);
+    }
+
+    @Test
     public void verifyOnDeleteButtonClicked(){
         //Given
         long taskId = 2;
@@ -151,6 +187,58 @@ public class MainViewModelTest {
 
     private List<TaskViewState> getEmptyTaskViewState(){
         return new ArrayList<>();
+    }
+
+    private List<TaskViewState> getDefaultTaskViewStatesListSortedByAlphabeticalOrderAToZ(){
+
+        List<TaskViewState> taskViewStates = new ArrayList<>();
+        TaskViewState taskViewState = new TaskViewState(1,"première tache", project1.getName(),0xFFEADAD1);
+        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", project2.getName(),0xFFB4CDBA);
+
+
+        taskViewStates.add(taskViewState2);
+        taskViewStates.add(taskViewState);
+        return taskViewStates;
+
+    }
+
+    private List<TaskViewState> getDefaultTaskViewStatesListSortedByAlphabeticalOrderZToA(){
+
+        List<TaskViewState> taskViewStates = new ArrayList<>();
+        TaskViewState taskViewState = new TaskViewState(1,"première tache", project1.getName(),0xFFEADAD1);
+        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", project2.getName(),0xFFB4CDBA);
+
+
+        taskViewStates.add(taskViewState);
+        taskViewStates.add(taskViewState2);
+        return taskViewStates;
+
+    }
+
+    private List<TaskViewState> getDefaultTaskViewStatesListSortedByRecentFirst(){
+
+        List<TaskViewState> taskViewStates = new ArrayList<>();
+        TaskViewState taskViewState = new TaskViewState(1,"première tache", project1.getName(),0xFFEADAD1);
+        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", project2.getName(),0xFFB4CDBA);
+
+
+        taskViewStates.add(taskViewState2);
+        taskViewStates.add(taskViewState);
+        return taskViewStates;
+
+    }
+
+    private List<TaskViewState> getDefaultTaskViewStatesListSortedByOldFirst(){
+
+        List<TaskViewState> taskViewStates = new ArrayList<>();
+        TaskViewState taskViewState = new TaskViewState(1,"première tache", project1.getName(),0xFFEADAD1);
+        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", project2.getName(),0xFFB4CDBA);
+
+
+        taskViewStates.add(taskViewState);
+        taskViewStates.add(taskViewState2);
+        return taskViewStates;
+
     }
 
 

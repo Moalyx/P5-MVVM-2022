@@ -79,7 +79,7 @@ public class CreateTaskViewModelTest {
         assertEquals(getDefaultProjectViewStates(), projectViewStates);
         assertNull(toastMessage);
         assertNull(dismissDialog);
-        Mockito.verifyNoMoreInteractions(application, repository, mainThreadExecutor, ioExecutor); //ERREUR ICI QUAND DECOMMENTE
+        Mockito.verifyNoMoreInteractions(application, repository, mainThreadExecutor, ioExecutor);
     }
 
     @Test
@@ -134,7 +134,7 @@ public class CreateTaskViewModelTest {
         assertNull(dismissDialog);
         Mockito.verify(ioExecutor).execute(any());
         Mockito.verify(repository).insertTask(new Task(0, 2, taskDescription));
-        Mockito.verifyNoMoreInteractions(application, repository);
+        Mockito.verifyNoMoreInteractions(application, repository, ioExecutor);
     }
 
     @Test
