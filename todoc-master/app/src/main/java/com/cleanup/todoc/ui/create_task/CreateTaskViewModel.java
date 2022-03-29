@@ -31,7 +31,7 @@ public class CreateTaskViewModel extends ViewModel {
 
     private final SingleLiveEvent<String> toastMessageSingleLiveEvent = new SingleLiveEvent<>();
 
-    private final SingleLiveEvent<Void> dismissSingleLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Boolean> dismissSingleLiveEvent = new SingleLiveEvent<>();
 
     private final LiveData<List<ProjectViewState>> viewStateLiveData;
 
@@ -98,7 +98,7 @@ public class CreateTaskViewModel extends ViewModel {
 
 
 
-    public SingleLiveEvent<Void> getDismissSingleLiveEvent() {
+    public SingleLiveEvent<Boolean> getDismissSingleLiveEvent() {
         return dismissSingleLiveEvent;
     }
 
@@ -123,7 +123,7 @@ public class CreateTaskViewModel extends ViewModel {
                 mainThreadExecutor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        dismissSingleLiveEvent.call();
+                        dismissSingleLiveEvent.setValue(true);
                     }
                 });
             }

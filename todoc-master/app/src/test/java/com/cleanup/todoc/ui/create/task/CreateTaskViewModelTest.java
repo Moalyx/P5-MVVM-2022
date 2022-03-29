@@ -73,7 +73,7 @@ public class CreateTaskViewModelTest {
         //When
         List<ProjectViewState> projectViewStates = LiveDataTestUtils.getValue(createTaskViewModel.getListProjectViewState());
         String toastMessage = LiveDataTestUtils.getValue(createTaskViewModel.getToastMessageSingleLiveEvent());
-        Void dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
+        Boolean dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
 
         //Then
         assertEquals(getDefaultProjectViewStates(), projectViewStates);
@@ -90,7 +90,7 @@ public class CreateTaskViewModelTest {
         //When
         List<ProjectViewState> projectViewState = LiveDataTestUtils.getValue(createTaskViewModel.getListProjectViewState());
         String toastMessage = LiveDataTestUtils.getValue(createTaskViewModel.getToastMessageSingleLiveEvent());
-        Void dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
+        Boolean dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
 
         //Then
         assertEquals(new ArrayList<>(), projectViewState);
@@ -106,7 +106,7 @@ public class CreateTaskViewModelTest {
         //When
         List<ProjectViewState> projectViewState = LiveDataTestUtils.getValue(createTaskViewModel.getListProjectViewState());
         String toastMessage = LiveDataTestUtils.getValue(createTaskViewModel.getToastMessageSingleLiveEvent());
-        Void dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
+        Boolean dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
 
         //Then
         assertNull(projectViewState);
@@ -118,23 +118,22 @@ public class CreateTaskViewModelTest {
     public void addTaskSuccessfully() throws InterruptedException {
         //Given
         String taskDescription = "this is a taskDescription";
-        ProjectViewState projectViewStateToTest = new ProjectViewState(1, "Projet Tartampion", 0xFFEADAD1);
-        long selectedProjectId = projectViewStateToTest.getProjectId();
 
         //When
         createTaskViewModel.onOkButtonClicked(2, taskDescription);
 
         List<ProjectViewState> projectViewStates = LiveDataTestUtils.getValue(createTaskViewModel.getListProjectViewState());
         String toastMessage = LiveDataTestUtils.getValue(createTaskViewModel.getToastMessageSingleLiveEvent());
-        Void dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
+        Boolean dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
 
         //Then
         assertEquals(getDefaultProjectViewStates(), projectViewStates);
         assertNull(toastMessage);
-        assertNull(dismissDialog);
+        assertTrue(dismissDialog);
         Mockito.verify(ioExecutor).execute(any());
         Mockito.verify(repository).insertTask(new Task(0, 2, taskDescription));
-        Mockito.verifyNoMoreInteractions(application, repository, ioExecutor);
+        Mockito.verify(mainThreadExecutor).execute(any());
+        Mockito.verifyNoMoreInteractions(application, repository, ioExecutor, mainThreadExecutor);
     }
 
     @Test
@@ -146,7 +145,7 @@ public class CreateTaskViewModelTest {
         createTaskViewModel.onOkButtonClicked(2, taskDescription);
 
         String toastMessage = LiveDataTestUtils.getValue(createTaskViewModel.getToastMessageSingleLiveEvent());
-        Void dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
+        Boolean dismissDialog = LiveDataTestUtils.getValue(createTaskViewModel.getDismissSingleLiveEvent());
 
         //Then
         assertEquals("empty_task", toastMessage);

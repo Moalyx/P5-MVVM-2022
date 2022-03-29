@@ -5,13 +5,11 @@ import static org.mockito.ArgumentMatchers.any;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.cleanup.todoc.data.Repository;
 import com.cleanup.todoc.data.entity.Project;
 import com.cleanup.todoc.data.entity.Task;
-import com.cleanup.todoc.ui.create_task.ProjectViewState;
 import com.cleanup.todoc.utils.LiveDataTestUtils;
 import com.cleanup.todoc.utils.TestExecutor;
 
@@ -23,7 +21,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -31,11 +29,11 @@ import java.util.concurrent.Executor;
 public class MainViewModelTest {
 
 
-    private static final Project project1 = new Project(1, "Tartampion", 0xFFEADAD1);
-    private static final Project project2 = new Project(2, "Projet Lucidia", 0xFFB4CDBA);
+    private static final Project PROJECT_1 = new Project(1, "Tartampion", 0xFFEADAD1);
+    private static final Project PROJECT_2 = new Project(2, "Projet Lucidia", 0xFFB4CDBA);
 
-    private static final Task taskForProject1 = new Task(1, project1.getId(), "première tache");
-    private static final Task taskForProject2 = new Task(2, project2.getId(), "deuxième tache");
+    private static final Task TASK_FOR_PROJECT_1 = new Task(1, PROJECT_1.getId(), "première tache");
+    private static final Task TASK_FOR_PROJECT_2 = new Task(2, PROJECT_2.getId(), "deuxième tache");
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -54,13 +52,13 @@ public class MainViewModelTest {
         Mockito.doReturn(tasksMutableLiveData).when(repository).getAllTask();
 
         List<Project> projects = new ArrayList<>();
-        projects.add(project1);
-        projects.add(project2);
+        projects.add(PROJECT_1);
+        projects.add(PROJECT_2);
         projectsMutableLiveData.setValue(projects);
 
         List<Task> tasks = new ArrayList<>();
-        tasks.add(taskForProject1);
-        tasks.add(taskForProject2);
+        tasks.add(TASK_FOR_PROJECT_1);
+        tasks.add(TASK_FOR_PROJECT_2);
         tasksMutableLiveData.setValue(tasks);
 
         mainViewModel = new MainViewModel(repository,ioExecutor);
@@ -81,7 +79,6 @@ public class MainViewModelTest {
         //Then
         assertEquals(taskViewStates, getDefaultTaskViewStates());
         //Mockito.verify(mainViewModel).getViewStateLiveData();
-        Mockito.verify(ioExecutor, Mockito.never()).execute(any());
         Mockito.verifyNoMoreInteractions(repository, ioExecutor);
 
     }
@@ -98,10 +95,13 @@ public class MainViewModelTest {
 
     @Test
     public void sortByAlphabetical() throws InterruptedException {
+        // Given
         mainViewModel.onSortMethodChanged(MainViewModel.SortMethod.NONE);
 
+        // When
         List<TaskViewState> taskViewStates = LiveDataTestUtils.getValue(mainViewModel.getViewStateLiveData());
 
+        // Then
         assertEquals(getDefaultTaskViewStates(), taskViewStates);
     }
 
@@ -158,12 +158,12 @@ public class MainViewModelTest {
     @NonNull
     private List<TaskViewState> getDefaultTaskViewStates() {
         List<Project> projects = new ArrayList<>();
-        projects.add(project1);
-        projects.add(project2);
+        projects.add(PROJECT_1);
+        projects.add(PROJECT_2);
 
         List<Task> tasks = new ArrayList<>();
-        tasks.add(taskForProject1);
-        tasks.add(taskForProject2);
+        tasks.add(TASK_FOR_PROJECT_1);
+        tasks.add(TASK_FOR_PROJECT_2);
 
         List<TaskViewState> taskViewStates = new ArrayList<>();
 
@@ -190,23 +190,17 @@ public class MainViewModelTest {
     }
 
     private List<TaskViewState> getDefaultTaskViewStatesListSortedByAlphabeticalOrderAToZ(){
-
-        List<TaskViewState> taskViewStates = new ArrayList<>();
-        TaskViewState taskViewState = new TaskViewState(1,"première tache", project1.getName(),0xFFEADAD1);
-        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", project2.getName(),0xFFB4CDBA);
-
-
-        taskViewStates.add(taskViewState2);
-        taskViewStates.add(taskViewState);
-        return taskViewStates;
-
+        return Arrays.asList(
+                new TaskViewState(1,"première tache", PROJECT_1.getName(),0xFFEADAD1),
+                new TaskViewState(2,"deuxième tache", PROJECT_2.getName(),0xFFB4CDBA)
+        );
     }
 
     private List<TaskViewState> getDefaultTaskViewStatesListSortedByAlphabeticalOrderZToA(){
 
         List<TaskViewState> taskViewStates = new ArrayList<>();
-        TaskViewState taskViewState = new TaskViewState(1,"première tache", project1.getName(),0xFFEADAD1);
-        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", project2.getName(),0xFFB4CDBA);
+        TaskViewState taskViewState = new TaskViewState(1,"première tache", PROJECT_1.getName(),0xFFEADAD1);
+        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", PROJECT_2.getName(),0xFFB4CDBA);
 
 
         taskViewStates.add(taskViewState);
@@ -218,8 +212,8 @@ public class MainViewModelTest {
     private List<TaskViewState> getDefaultTaskViewStatesListSortedByRecentFirst(){
 
         List<TaskViewState> taskViewStates = new ArrayList<>();
-        TaskViewState taskViewState = new TaskViewState(1,"première tache", project1.getName(),0xFFEADAD1);
-        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", project2.getName(),0xFFB4CDBA);
+        TaskViewState taskViewState = new TaskViewState(1,"première tache", PROJECT_1.getName(),0xFFEADAD1);
+        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", PROJECT_2.getName(),0xFFB4CDBA);
 
 
         taskViewStates.add(taskViewState2);
@@ -231,8 +225,8 @@ public class MainViewModelTest {
     private List<TaskViewState> getDefaultTaskViewStatesListSortedByOldFirst(){
 
         List<TaskViewState> taskViewStates = new ArrayList<>();
-        TaskViewState taskViewState = new TaskViewState(1,"première tache", project1.getName(),0xFFEADAD1);
-        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", project2.getName(),0xFFB4CDBA);
+        TaskViewState taskViewState = new TaskViewState(1,"première tache", PROJECT_1.getName(),0xFFEADAD1);
+        TaskViewState taskViewState2 = new TaskViewState(2,"deuxième tache", PROJECT_2.getName(),0xFFB4CDBA);
 
 
         taskViewStates.add(taskViewState);

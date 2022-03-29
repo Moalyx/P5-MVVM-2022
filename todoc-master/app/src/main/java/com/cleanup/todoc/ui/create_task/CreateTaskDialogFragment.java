@@ -61,9 +61,9 @@ public class CreateTaskDialogFragment extends DialogFragment {
             }
         });
 
-        viewModel.getDismissSingleLiveEvent().observe(this, new Observer<Void>() {
+        viewModel.getDismissSingleLiveEvent().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(Void unused) {
+            public void onChanged(Boolean unused) {
                 dismiss();
             }
         });
